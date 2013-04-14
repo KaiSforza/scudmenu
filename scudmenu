@@ -90,7 +90,7 @@ unit="$(dmenucmd "systemctl --user $cmd" "${service[@]}")"
 # specially, and will open a urxvt window displaying the status output,
 # otherwise we just run systemctl --user with the specified command and unit.
 if [[ $cmd == "status" ]]; then
-  urxvtc -title "scustatus" -e /usr/bin/bash -c "systemctl --user $cmd $unit; read "
+  urxvt -title "scustatus" -e /usr/bin/bash -c "systemctl --user $cmd $unit; read "
 else
   systemctl --user "$cmd" "$unit"
 fi
