@@ -27,27 +27,6 @@ dmenucmd() {
     -p "$mesg"
 }
 
-##
-# filter out .services and full path, only showing service name.
-# params: input
-# input:   word to be filtered
-# Example - input = /etc/systemd/user/foo.service
-#           output=                   foo
-##
-return_services () {
-  local arg="$1"
-  if [[ $arg == *"*.service"* || $arg == *"*.socket"* ]]; then
-    # If the service directory doesn't have any service files, it will usually
-    # return /path/to/service/*.service, so filter that out right away.
-    unset serv
-  else
-    j="${i##*/}"
-    j="${j%%.service}"
-    serv="$j"
-    printf "%s" "$serv"
-  fi
-}
-
 # pick a font for your dmenu. I use proggyoptis. It's tiny.
 font="${font:="-*-proggyoptis-*-*-*-*-*-*-*-*-*-*-*-*"}"
 
