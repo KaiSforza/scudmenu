@@ -1,4 +1,7 @@
 #!/bin/bash
+# Licensed under the MIT/X Consortium License
+# © 2013 William Giokas <1007380@gmail.com>
+# See LICENSE for more information
 
 # systemctl-user-dmenu
 # Use systemctl --user from dmenu. Useful in tiling wms.
