@@ -45,8 +45,11 @@ opts=("start"
 # mostly manipulated with systemctl --user)
 # Use a param to limit this, something like "loaded" or "loaded active"
 # (see below)
-get_systemctl() {
-  printf -- "%s" "$(systemctl --no-legend --full --user --type=service,socket --all | sed -n "s/${1}.*//p")"
+get_systemctl_list() {
+  printf -- "%s" "$(systemctl --no-legend --full --user --type=service,socket --all list-units | sed -n "s/${1}.*//p")"
+}
+get_systemctl_files() {
+  printf -- "%s" "$(systemctl --no-legend --full --user --type=service,socket --all list-unit-files | sed -n "s/ .*//p")"
 }
 
 # Depending on the case, we want to filter by a specific state of unit.
@@ -58,16 +61,16 @@ find_services () {
   local orig_list=()
   case $action in
     start)
-      orig_list=($(get_systemctl "loaded") )
+      orig_list=($(get_systemctl_files ) )
       ;;
     status)
-      orig_list=($(get_systemctl "loaded") )
+      orig_list=($(get_systemctl_list "loaded") )
       ;;
     stop|*restart)
-      orig_list=($(get_systemctl "loaded active") )
+      orig_list=($(get_systemctl_list "loaded active") )
       ;;
     *)
-      orig_list=($(get_systemctl "loaded") )
+      orig_list=($(get_systemctl_files ) )
       ;;
   esac
   printf -- "%s " ${orig_list[@]/.service/}
