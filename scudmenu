@@ -36,6 +36,7 @@ font="${font:="-*-proggyoptis-*-*-*-*-*-*-*-*-*-*-*-*"}"
 # Specify the options you want to see. `status` is treated specially and should
 # not be removed from the array.
 opts=("start"
+      "run"
       "stop"
       "restart" "try-restart" "reload-or-restart"
       "status"
@@ -50,6 +51,9 @@ get_systemctl_list() {
 }
 get_systemctl_files() {
   printf -- "%s" "$(systemctl --no-legend --full --user --type=service,socket --all list-unit-files | sed -n "s/ .*//p")"
+}
+get_path_files() {
+  printf -- "%s" "$(dmenu_path)"
 }
 
 # Depending on the case, we want to filter by a specific state of unit.
@@ -68,6 +72,9 @@ find_services () {
       ;;
     stop|*restart)
       orig_list=($(get_systemctl_list "loaded active") )
+      ;;
+    run)
+      orig_list=($(get_path_files) )
       ;;
     *)
       orig_list=($(get_systemctl_files ) )
@@ -94,6 +101,8 @@ unit="$(dmenucmd "systemctl --user $cmd" "${service[@]}")"
 # otherwise we just run systemctl --user with the specified command and unit.
 if [[ $cmd == "status" ]]; then
   urxvt -title "scustatus" -e /usr/bin/bash -c "systemctl --user $cmd $unit; read "
+elif [[ $cmd == "run" ]]; then
+  systemd-run --user --unit="run-${unit}" "$unit"
 else
   systemctl --user "$cmd" "$unit"
 fi
