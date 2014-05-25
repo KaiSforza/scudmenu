@@ -71,7 +71,7 @@ find_services () {
       orig_list=($(get_systemctl_list "loaded") )
       ;;
     stop|*restart)
-      orig_list=($(get_systemctl_list "loaded active") )
+      orig_list=($(get_systemctl_list "loaded *active") )
       ;;
     run)
       orig_list=($(get_path_files) )
